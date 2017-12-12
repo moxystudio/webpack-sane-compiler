@@ -1,0 +1,115 @@
+'use strict';
+
+const fs = require('fs');
+const createCompiler = require('./util/createCompiler');
+const touchFile = require('./util/touchFile');
+const configBasic = require('./configs/basic');
+const configSyntaxError = require('./configs/syntax-error');
+
+describe('.watch()', () => {
+    afterEach(() => createCompiler.teardown());
+
+    it('should call the handler everytime a file changes', (done) => {
+        const compiler = createCompiler(configBasic);
+        let callsCount = 0;
+
+        compiler.watch((err, stats) => {
+            expect(err).toBe(null);
+            expect(stats.toJson().assetsByChunkName).toEqual({ main: 'client.js' });
+
+            callsCount += 1;
+
+            if (callsCount === 2) {
+                done();
+            } else {
+                touchFile(configBasic.entry);
+            }
+        });
+    });
+
+    it('should fail if the compiler fails', () => {
+        const compiler = createCompiler(configSyntaxError);
+
+        compiler.watch((err, stats) => {
+            expect(err instanceof Error).toBe(true);
+            expect(err.message).toMatch(/\bclient-side\b/);
+            expect(stats).toBe(null);
+        });
+    });
+
+    it('should fail if there\'s a fatal error', (done) => {
+        const compiler = createCompiler(configBasic);
+        const contrivedError = new Error('foo');
+
+        compiler.webpackCompiler.plugin('watch-run', (compiler, callback) => callback(contrivedError));
+
+        compiler.watch((err) => {
+            expect(err).toBe(contrivedError);
+
+            done();
+        });
+    });
+
+    it('should output assets', (done) => {
+        const compiler = createCompiler(configBasic);
+
+        compiler.watch(() => {
+            expect(fs.existsSync(`${compiler.webpackConfig.output.path}/client.js`)).toBe(true);
+
+            done();
+        });
+    });
+
+    describe('args', () => {
+        it('should work with .watch()', (done) => {
+            const compiler = createCompiler(configBasic);
+
+            compiler
+            .on('end', () => done())
+            .on('error', (err) => done.fail(err))
+            .watch();
+        });
+
+        it('should work with .watch(options)', (done) => {
+            const compiler = createCompiler(configBasic);
+
+            compiler
+            .on('end', () => done())
+            .on('error', (err) => done.fail(err))
+            .watch({ poll: true });
+        });
+
+        it('should work with .watch(options, handler)', (done) => {
+            const compiler = createCompiler(configBasic);
+
+            compiler.watch({}, (err) => {
+                if (err) {
+                    done.fail(err);
+                } else {
+                    done();
+                }
+            });
+        });
+
+        it('should work with .watch(handler)', (done) => {
+            const compiler = createCompiler(configBasic);
+
+            compiler.watch((err) => {
+                if (err) {
+                    done.fail(err);
+                } else {
+                    done();
+                }
+            });
+        });
+
+        it('should throw if not idle', () => {
+            const compiler = createCompiler(configBasic);
+
+            compiler.watch();
+
+            expect(() => compiler.run()).toThrow(/\bidle\b/);
+            expect(() => compiler.watch()).toThrow(/\bidle\b/);
+        });
+    });
+});
