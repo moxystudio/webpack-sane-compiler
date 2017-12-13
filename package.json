@@ -1,0 +1,81 @@
+{
+  "name": "webpack-sane-compiler",
+  "version": "1.0.0",
+  "description": "A webpack compiler wrapper that provides a nicer API.",
+  "keywords": [
+    "webpack",
+    "compiler",
+    "compilation"
+  ],
+  "author": "André Neves <andre.neves@moxy.studio>",
+  "contributors": [
+    "André Cruz <andre@moxy.studio>"
+  ],
+  "license": "MIT",
+  "bugs": "https://github.com/moxystudio/webpack-sane-compiler/issues",
+  "homepage": "https://github.com/moxystudio/webpack-sane-compiler",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:moxystudio/webpack-sane-compiler"
+  },
+  "main": "index.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "lint": "eslint .",
+    "test": "jest --env node --coverage",
+    "prerelease": "npm t && npm run lint",
+    "release": "standard-version",
+    "precommit": "lint-staged",
+    "commitmsg": "commitlint -e $GIT_PARAMS"
+  },
+  "standard-version": {
+    "scripts": {
+      "posttag": "git push --follow-tags origin master && npm publish"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-angular"
+    ]
+  },
+  "peerDependencies": {
+    "webpack": ">=2.0.0 <4.0.0"
+  },
+  "dependencies": {
+    "lodash.wrap": "^4.1.1",
+    "p-defer": "^1.0.0",
+    "p-finally": "^1.0.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^5.0.1",
+    "@commitlint/config-angular": "^4.3.0",
+    "delay": "^2.0.0",
+    "eslint": "^4.0.0",
+    "eslint-config-moxy": "^4.1.0",
+    "husky": "^0.14.0",
+    "jest": "^21.0.0",
+    "lint-staged": "^5.0.0",
+    "p-settle": "^2.0.0",
+    "pify": "^3.0.0",
+    "rimraf": "^2.6.2",
+    "standard-version": "^4.2.0",
+    "webpack": "^3.10.0"
+  },
+  "jest": {
+    "modulePathIgnorePatterns": [
+      "test/tmp/",
+      "test/configs/"
+    ],
+    "coveragePathIgnorePatterns": [
+      "test/"
+    ]
+  }
+}
