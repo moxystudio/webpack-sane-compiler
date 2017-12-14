@@ -23,6 +23,7 @@ A webpack compiler wrapper that provides a nicer API.
 
 `$ npm install webpack-sane-compiler --save-dev`
 
+
 ## Usage
 
 ```js
