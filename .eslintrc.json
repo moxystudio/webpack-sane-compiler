@@ -4,6 +4,6 @@
         "eslint-config-moxy/es6",
         "eslint-config-moxy/addons/node",
         "eslint-config-moxy/addons/jest",
-        "eslint-config-moxy/object-spread"
+        "eslint-config-moxy/addons/object-spread"
     ]
 }
