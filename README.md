@@ -157,6 +157,15 @@ Returns the compilation stats object or null if it failed or not yet available.
 Accessing webpack compiler public methods is NOT allowed and will throw an error.
 
 
+## Related projects
+
+You may also want to look at:
+
+- [webpack-sane-compiler-reporter](https://github.com/moxystudio/webpack-sane-compiler-reporter): Beautiful reporting for this compiler
+- [webpack-sane-compiler-notifier](https://github.com/moxystudio/webpack-sane-compiler-notifier): Receive OS notifications for this compiler
+- [webpack-isomorphic-compiler](https://github.com/moxystudio/webpack-isomorphic-compiler): A compiler that makes your life easier if you are building isomorphic webpack powered apps
+
+
 ## Tests
 
 `$ npm test`   
