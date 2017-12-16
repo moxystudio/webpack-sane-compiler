@@ -45,8 +45,8 @@ The compiler inherits from [EventEmitter](https://nodejs.org/api/events.html) an
 | Name   | Description   | Arguments |
 | ------ | ------------- | -------- |
 | begin | Emitted when a compilation starts | |
-| error | Emitted when the compilation fails | (`err: Error`) |
-| end | Emitted when the compilation completes successfully | (`stats: WebpackStats`) |
+| error | Emitted when the compilation fails | (err: Error) |
+| end | Emitted when the compilation completes successfully | (stats: WebpackStats) |
 
 ```js
 compiler
@@ -93,7 +93,7 @@ Available options:
 
 | Name   | Description   | Type     | Default |
 | ------ | ------------- | -------- | ------- |
-| poll | Use polling instead of native watchers | boolean | `false` |
+| poll | Use polling instead of native watchers | boolean | false |
 | aggregateTimeout | Wait so long for more changes (ms) | err | 200 |
 
 ```js
