@@ -51,11 +51,11 @@ function compiler(webpackArg) {
             compiler.assertIdle('run');
 
             return new Promise((resolve, reject) => {
-                webpackCompiler.run((err, stats) => {
-                    if (err) {
-                        reject(err);
+                webpackCompiler.run(() => {
+                    if (state.error) {
+                        reject(state.error);
                     } else {
-                        resolve(stats);
+                        resolve(state.stats);
                     }
                 });
             });
