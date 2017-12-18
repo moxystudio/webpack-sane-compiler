@@ -15,79 +15,74 @@ function createCompilerWithEvents(...args) {
     return { compiler, events };
 }
 
-describe('events', () => {
-    afterEach(() => createCompiler.teardown());
+afterEach(() => createCompiler.teardown());
 
-    it('should emit correct events on a successful .run()', () => {
-        const { compiler, events } = createCompilerWithEvents(configBasic);
+it('should emit correct events on a successful .run()', async () => {
+    const { compiler, events } = createCompilerWithEvents(configBasic);
 
-        return compiler
-        .run()
-        .then(() => {
-            expect(events).toEqual(['begin', 'end']);
-        });
-    });
+    await compiler.run();
 
-    it('should emit correct events on a failed .run()', () => {
-        const { compiler, events } = createCompilerWithEvents(configSyntaxError);
+    expect(events).toEqual(['begin', 'end']);
+});
 
-        return compiler
-        .run()
-        .then(() => {
-            expect(events).toEqual(['begin', 'error']);
-        })
-        .catch(() => {});
-    });
+it('should emit correct events on a failed .run()', async () => {
+    const { compiler, events } = createCompilerWithEvents(configSyntaxError);
 
-    it('should emit correct events on a successful .watch() cycle', (done) => {
-        const { compiler, events } = createCompilerWithEvents(configBasic);
+    try {
+        await compiler.run();
+    } catch (err) { /* Do nothing */ }
 
-        function finish() {
-            expect(events).toEqual(['begin', 'end']);
+    expect(events).toEqual(['begin', 'error']);
+});
 
-            done();
-        }
+it('should emit correct events on a successful .watch() cycle', (done) => {
+    const { compiler, events } = createCompilerWithEvents(configBasic);
 
-        compiler
-        .on('end', finish)
-        .on('error', finish)
-        .watch();
-    });
+    function finish() {
+        expect(events).toEqual(['begin', 'end']);
 
-    it('should emit correct events on a failed .watch() cycle', (done) => {
-        const { compiler, events } = createCompilerWithEvents(configSyntaxError);
+        done();
+    }
 
-        function finish() {
-            expect(events).toEqual(['begin', 'error']);
+    compiler
+    .on('end', finish)
+    .on('error', finish)
+    .watch();
+});
 
-            done();
-        }
+it('should emit correct events on a failed .watch() cycle', (done) => {
+    const { compiler, events } = createCompilerWithEvents(configSyntaxError);
 
-        compiler
-        .on('end', finish)
-        .on('error', finish)
-        .watch();
-    });
+    function finish() {
+        expect(events).toEqual(['begin', 'error']);
 
-    it('should emit the correct events if a compilation was canceled via .unwatch()', (done) => {
-        const { compiler, events } = createCompilerWithEvents(configBasic);
-        let error;
+        done();
+    }
 
-        function finish() {
-            expect(events).toEqual(['begin', 'error']);
-            expect(error.message).toMatch(/\bcanceled\b/);
+    compiler
+    .on('end', finish)
+    .on('error', finish)
+    .watch();
+});
 
-            done();
-        }
+it('should emit the correct events if a compilation was canceled via .unwatch()', (done) => {
+    const { compiler, events } = createCompilerWithEvents(configBasic);
+    let error;
 
-        compiler
-        .on('end', finish)
-        .on('error', (err) => {
-            error = err;
+    function finish() {
+        expect(events).toEqual(['begin', 'error']);
+        expect(error.message).toMatch(/\bcanceled\b/);
 
-            finish();
-        })
-        .watch()
-        .unwatch();
-    });
+        done();
+    }
+
+    compiler
+    .on('end', finish)
+    .on('error', (err) => {
+        error = err;
+
+        finish();
+    })
+    .watch()
+    .unwatch();
 });

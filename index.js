@@ -34,8 +34,8 @@ function compiler(webpackArg) {
             return state.isCompiling;
         },
 
-        getStats() {
-            return state.stats;
+        getCompilation() {
+            return state.compilation;
         },
 
         getError() {
@@ -55,7 +55,7 @@ function compiler(webpackArg) {
                     if (state.error) {
                         reject(state.error);
                     } else {
-                        resolve(state.stats);
+                        resolve(state.compilation);
                     }
                 });
             });
@@ -70,7 +70,7 @@ function compiler(webpackArg) {
             }
 
             function baseHandler() {
-                !state.isCompiling && handler(state.error, state.stats);
+                !state.isCompiling && handler(state.error, state.compilation);
             }
 
             webpackCompiler.watch(options, baseHandler);
@@ -93,15 +93,15 @@ function compiler(webpackArg) {
         },
 
         resolve() {
-            const { error, stats } = state;
+            const { error, compilation } = state;
 
             // Already resolved?
             if (error) {
                 return Promise.reject(error);
             }
 
-            if (stats) {
-                return Promise.resolve(stats);
+            if (compilation) {
+                return Promise.resolve(compilation);
             }
 
             // Wait for it to be resolved
@@ -119,10 +119,10 @@ function compiler(webpackArg) {
                 deferred.reject(err);
             }
 
-            function onEnd(stats) {
+            function onEnd(compilation) {
                 cleanup();
 
-                deferred.resolve(stats);
+                deferred.resolve(compilation);
             }
 
             compiler

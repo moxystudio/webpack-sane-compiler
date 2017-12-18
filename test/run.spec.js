@@ -5,64 +5,59 @@ const createCompiler = require('./util/createCompiler');
 const configBasic = require('./configs/basic');
 const configSyntaxError = require('./configs/syntax-error');
 
-describe('.run()', () => {
-    afterEach(() => createCompiler.teardown());
+afterEach(() => createCompiler.teardown());
 
-    it('should fulfill with stats', () => {
-        const compiler = createCompiler(configBasic);
+it('should fulfill with the compilation result', async () => {
+    const compiler = createCompiler(configBasic);
 
-        return compiler
-        .run()
-        .then((stats) => {
-            expect(stats.toJson().assetsByChunkName).toEqual({ main: 'client.js' });
-        });
+    const { stats, duration } = await compiler.run();
+
+    expect(stats.toJson().assetsByChunkName).toEqual({ main: 'app.js' });
+    expect(typeof duration).toBe('number');
+});
+
+it('should fail if the compilation fails', async () => {
+    const compiler = createCompiler(configSyntaxError);
+
+    expect.assertions(2);
+
+    try {
+        await compiler.run();
+    } catch (err) {
+        expect(err instanceof Error).toBe(true);
+        expect(err.message).toBe('Webpack compilation failed');
+    }
+});
+
+it('should fail if there\'s a fatal error', async () => {
+    const compiler = createCompiler(configBasic);
+    const contrivedError = new Error('foo');
+
+    compiler.webpackCompiler.plugin('before-run', (compiler, callback) => {
+        setImmediate(() => callback(contrivedError));
     });
 
-    it('should fail if the compilers fails', () => {
-        const compiler = createCompiler(configSyntaxError);
+    try {
+        await compiler.run();
+    } catch (err) {
+        expect(err).toBe(contrivedError);
+    }
+});
 
-        compiler
-        .run()
-        .catch((err) => {
-            expect(err instanceof Error).toBe(true);
-            expect(err.message).toMatch(/\bwebpack compilation failed\b/);
-        });
-    });
+it('should output assets', async () => {
+    const compiler = createCompiler(configBasic);
 
-    it('should fail if there\'s a fatal error', () => {
-        const compiler = createCompiler(configBasic);
-        const contrivedError = new Error('foo');
+    await compiler.run();
 
-        compiler.webpackCompiler.plugin('before-run', (compiler, callback) => {
-            setImmediate(() => callback(contrivedError));
-        });
+    expect(fs.existsSync(`${compiler.webpackConfig.output.path}/app.js`)).toBe(true);
+});
 
-        return compiler
-        .run()
-        .then(() => {
-            throw new Error('Should have failed');
-        }, (err) => {
-            expect(err).toBe(contrivedError);
-        });
-    });
+it('should throw if not idle', () => {
+    const compiler = createCompiler(configBasic);
+    const promise = compiler.run().catch(() => {});
 
-    it('should output assets', () => {
-        const compiler = createCompiler(configBasic);
+    expect(() => compiler.run()).toThrow(/\bidle\b/);
+    expect(() => compiler.watch()).toThrow(/\bidle\b/);
 
-        return compiler
-        .run()
-        .then(() => {
-            expect(fs.existsSync(`${compiler.webpackConfig.output.path}/client.js`)).toBe(true);
-        });
-    });
-
-    it('should throw if not idle', () => {
-        const compiler = createCompiler(configBasic);
-        const promise = compiler.run().catch(() => {});
-
-        expect(() => compiler.run()).toThrow(/\bidle\b/);
-        expect(() => compiler.watch()).toThrow(/\bidle\b/);
-
-        return promise;
-    });
+    return promise;
 });
