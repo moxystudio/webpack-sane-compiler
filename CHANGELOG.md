@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="2.0.0"></a>
+# [2.0.0](https://github.com/moxystudio/webpack-sane-compiler/compare/v1.0.0...v2.0.0) (2017-12-18)
+
+
+### Bug Fixes
+
+* fix error logic not being correct in some edge cases ([bb986d8](https://github.com/moxystudio/webpack-sane-compiler/commit/bb986d8))
+
+
+### Features
+
+* add duration to the compilation result ([e2c7dcb](https://github.com/moxystudio/webpack-sane-compiler/commit/e2c7dcb))
+
+
+### BREAKING CHANGES
+
+* the compiler now has the concept of compilation instead of status
+
+
+
 <a name="1.0.0"></a>
 # 1.0.0 (2017-12-13)
 
