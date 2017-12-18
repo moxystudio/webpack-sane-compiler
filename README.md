@@ -28,16 +28,16 @@ A webpack compiler wrapper that provides a nicer API.
 
 ```js
 const webpack = require('webpack');
-const saneWebpackCompiler = require('webpack-sane-compiler');
+const saneWebpack = require('webpack-sane-compiler');
 
 const webpackCompiler = webpack(/* config */);
-const compiler = saneWebpackCompiler(webpackCompiler);
+const compiler = saneWebpack(webpackCompiler);
 ```
 
 Alternatively, you may pass a config directly instead of a webpack compiler:
 
 ```js
-const compiler = saneWebpackCompiler(/* config */);
+const compiler = saneWebpack(/* config */);
 ```
 
 The compiler inherits from [EventEmitter](https://nodejs.org/api/events.html) and emits the following events:
@@ -46,32 +46,33 @@ The compiler inherits from [EventEmitter](https://nodejs.org/api/events.html) an
 | ------ | ------------- | -------- |
 | begin | Emitted when a compilation starts | |
 | error | Emitted when the compilation fails | (err: Error) |
-| end | Emitted when the compilation completes successfully | (stats: WebpackStats) |
+| end | Emitted when the compilation completes successfully | ({ stats: WebpackStats, duration: Number }) |
 
 ```js
 compiler
 .on('begin', () => console.log('Compilation started'))
-.on('end', (stats) => {
-    console.log('Compilation finished successfully');
+.on('end', ({ stats, duration }) => {
+    console.log(`Compilation finished successfully (${duration}ms)`);
     console.log('Stats', stats);
 })
 .on('error', (err) => {
     console.log('Compilation failed')
     console.log(err.message);
-    console.log(err.stats.toString());
+    err.stats && console.log(err.stats.toString());
 })
 ```
 
 ### .run()
 
-Returns a Promise that fulfills with a `stats` object or is rejected with an error.
+Returns a Promise that fulfils with a `stats` object or is rejected with an error.
 
 This is similar to webpack's run() method, except that it returns a promise which gets rejected if stats contains errors.
 
 ```js
 compiler.run()
-.then((stats) => {
-    // do something with stats
+.then(({ stats, duration }) => {
+    // stats is the webpack stats
+    // duration is the time it took to compile
 })
 .catch((err) => {
     // err = {
@@ -97,11 +98,13 @@ Available options:
 | aggregateTimeout | Wait so long for more changes (ms) | err | 200 |
 
 ```js
-compiler.watch((err, stats) => {
+compiler.watch((err, { stats, duration }) => {
     // err = {
     //   message: 'Error message',
     //   [stats]: <webpack-stats>
     // }
+    // stats is the webpack stats
+    // duration is the time it took to compile
 });
 ```
 
@@ -113,15 +116,16 @@ Returns a promise that fulfills when done.
 
 ### .resolve()
 
-Resolves the compiler result.
+Resolves the compilation result.
 
 The promise gets immediately resolved if the compiler has finished or failed.  
 Otherwise waits for a compilation to be done before resolving the promise.
 
 ```js
 compiler.resolve()
-.then((stats) => {
-    // do something with stats
+.then(({ stats, duration }) => {
+    // stats is the webpack stats
+    // duration is the time it took to compile
 })
 .catch((err) => {
     // err = {
@@ -142,9 +146,10 @@ Returns a boolean indicating a compilation is currently in progress.
 Returns the compilation error or null if none.
 
 
-### .getStats()
+### .getCompilation()
 
-Returns the compilation stats object or null if it failed or not yet available.
+Get the compilation result which is an object that contains `stats` and `duration`.   
+Returns null if the last compilation failed or if it's not yet available.
 
 
 ### Other properties

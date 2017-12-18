@@ -6,6 +6,6 @@ module.exports = {
     entry: path.resolve(`${__dirname}/files/syntax-error.js`),
     output: {
         path: path.resolve(`${__dirname}/../tmp`),
-        filename: 'client.js',
+        filename: 'app.js',
     },
 };
