@@ -23,6 +23,8 @@ A webpack compiler wrapper that provides a nicer API.
 
 `$ npm install webpack-sane-compiler --save-dev`
 
+The current version works with webpack v2 and v3.
+
 
 ## Usage
 
