@@ -51,6 +51,7 @@
   },
   "dependencies": {
     "lodash.wrap": "^4.1.1",
+    "mkdirp": "^0.5.1",
     "p-defer": "^1.0.0",
     "p-finally": "^1.0.0"
   },
