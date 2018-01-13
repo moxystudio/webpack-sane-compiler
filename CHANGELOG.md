@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="2.1.0"></a>
+# [2.1.0](https://github.com/moxystudio/webpack-sane-compiler/compare/v2.0.0...v2.1.0) (2018-01-13)
+
+
+### Features
+
+* override compiler's `outputFileSystem` to a fully featured `fs` ([3f42d3c](https://github.com/moxystudio/webpack-sane-compiler/commit/3f42d3c))
+
+
+
 <a name="2.0.0"></a>
 # [2.0.0](https://github.com/moxystudio/webpack-sane-compiler/compare/v1.0.0...v2.0.0) (2017-12-18)
 
