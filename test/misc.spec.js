@@ -1,5 +1,7 @@
 'use strict';
 
+const fs = require('fs');
+const mkdirp = require('mkdirp');
 const webpack = require('webpack');
 const saneCompiler = require('../');
 const createCompiler = require('./util/createCompiler');
@@ -21,6 +23,12 @@ it('should prevent direct access to webpack compiler\'s main methods', () => {
 
     expect(() => compiler.webpackCompiler.run).toThrow(/\bpublic API\b/);
     expect(() => compiler.webpackCompiler.watch).toThrow(/\bpublic API\b/);
+});
+
+it('should override the webpack compiler\'s outputFileSystem to a fully featured node fs', () => {
+    const compiler = createCompiler(configBasic);
+
+    expect(compiler.webpackCompiler.outputFileSystem).toMatchObject({ ...fs, mkdirp });
 });
 
 it('should allow passing a compiler instead of a webpack config', async () => {

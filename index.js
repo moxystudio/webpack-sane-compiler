@@ -5,6 +5,7 @@ const webpack = require('webpack');
 const pDefer = require('p-defer');
 
 const observeWebpackCompiler = require('./lib/observeWebpackCompiler');
+const nodeFs = require('./lib/nodeFs');
 
 function preventOriginalAPIDirectUsage(compiler) {
     const blacklistedMethods = ['run', 'watch'];
@@ -25,6 +26,8 @@ function compiler(webpackArg) {
     const webpackConfig = webpackArg.run ? webpackCompiler.options : webpackArg;
 
     const { eventEmitter, state } = observeWebpackCompiler(webpackCompiler);
+
+    webpackCompiler.outputFileSystem = nodeFs();
 
     const compiler = Object.assign(eventEmitter, {
         webpackConfig,

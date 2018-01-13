@@ -163,6 +163,7 @@ Returns null if the last compilation failed or if it's not yet available.
 
 Accessing webpack compiler public methods is NOT allowed and will throw an error.
 
+Note: `webpackCompiler`'s `outputFileSystem` property is overridden to a [fully featured node fs](/lib/nodeFs.js) implementation as opposed to its default value which only packs a [subset](https://github.com/webpack/webpack/blob/c71fd05f98a752753b9450f590c970b76379803d/lib/node/NodeOutputFileSystem.js) of the features.
 
 ## Related projects
 
