@@ -83,6 +83,7 @@ it('should emit the correct events if a compilation was canceled via .unwatch()'
 
         finish();
     })
-    .watch()
-    .unwatch();
+    .watch();
+
+    compiler.unwatch();
 });

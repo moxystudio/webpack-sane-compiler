@@ -76,9 +76,7 @@ function compiler(webpackArg) {
                 !state.isCompiling && handler(state.error, state.compilation);
             }
 
-            webpackCompiler.watch(options, baseHandler);
-
-            return compiler;
+            return webpackCompiler.watch(options, baseHandler);
         },
 
         unwatch() {
