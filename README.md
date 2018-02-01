@@ -49,6 +49,7 @@ The compiler inherits from [EventEmitter](https://nodejs.org/api/events.html) an
 | begin | Emitted when a compilation starts | |
 | error | Emitted when the compilation fails | (err: Error) |
 | end | Emitted when the compilation completes successfully | ({ stats: WebpackStats, duration: Number }) |
+| invalidate | Emitted when the function return by .watch is called | |
 
 ```js
 compiler
@@ -56,6 +57,9 @@ compiler
 .on('end', ({ stats, duration }) => {
     console.log(`Compilation finished successfully (${duration}ms)`);
     console.log('Stats', stats);
+})
+.on('invalidate', () => {
+    console.log('Compilation canceled. Starting new compilation.')
 })
 .on('error', (err) => {
     console.log('Compilation failed')
@@ -87,7 +91,7 @@ compiler.run()
 ### .watch([options], [handler])
 
 Starts watching for changes and compiles on-the-fly.   
-Returns itself to allow chaining.
+Returns a function that, when called, will stop an ongoing compilation and start a new one.
 
 Calls `handler` everytime the compilation fails or succeeds.
 This is similar to webpack's watch() method, except that `handler` gets called with an error if stats contains errors.
@@ -100,7 +104,7 @@ Available options:
 | aggregateTimeout | Wait so long for more changes (ms) | err | 200 |
 
 ```js
-compiler.watch((err, { stats, duration }) => {
+const invalidate = compiler.watch((err, { stats, duration }) => {
     // err = {
     //   message: 'Error message',
     //   [stats]: <webpack-stats>
@@ -108,6 +112,10 @@ compiler.watch((err, { stats, duration }) => {
     // stats is the webpack stats
     // duration is the time it took to compile
 });
+
+if (someReasonToTriggerARecompilation) {
+    invalidate();
+}
 ```
 
 ### .unwatch()
