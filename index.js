@@ -76,7 +76,16 @@ function compiler(webpackArg) {
                 !state.isCompiling && handler(state.error, state.compilation);
             }
 
-            return webpackCompiler.watch(options, baseHandler);
+            webpackCompiler.watch(options, baseHandler);
+
+            return () => {
+                if (!state.webpackWatcher) {
+                    throw new Error('Watcher is already closed');
+                }
+
+                eventEmitter.emit('invalidate');
+                state.webpackWatcher.invalidate();
+            };
         },
 
         unwatch() {

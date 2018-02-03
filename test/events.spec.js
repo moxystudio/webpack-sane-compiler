@@ -11,6 +11,7 @@ function createCompilerWithEvents(...args) {
     compiler.on('begin', () => events.push('begin'));
     compiler.on('error', () => events.push('error'));
     compiler.on('end', () => events.push('end'));
+    compiler.on('invalidate', () => events.push('invalidate'));
 
     return { compiler, events };
 }
@@ -86,4 +87,20 @@ it('should emit the correct events if a compilation was canceled via .unwatch()'
     .watch();
 
     compiler.unwatch();
+});
+
+it('should emit the correct events if a compilation was invalidated', (done) => {
+    const { compiler, events } = createCompilerWithEvents(configBasic);
+
+    function finish() {
+        expect(events).toEqual(['begin', 'end', 'invalidate', 'begin', 'end']);
+
+        done();
+    }
+
+    const invalidate = compiler
+    .on('error', finish)
+    .once('end', () => invalidate())
+    .on('invalidate', () => compiler.on('end', finish))
+    .watch();
 });
