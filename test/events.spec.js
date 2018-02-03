@@ -39,11 +39,11 @@ it('should emit correct events on a failed .run()', async () => {
 it('should emit correct events on a successful .watch() cycle', (done) => {
     const { compiler, events } = createCompilerWithEvents(configBasic);
 
-    function finish() {
+    const finish = () => {
         expect(events).toEqual(['begin', 'end']);
 
         done();
-    }
+    };
 
     compiler
     .on('end', finish)
@@ -54,11 +54,11 @@ it('should emit correct events on a successful .watch() cycle', (done) => {
 it('should emit correct events on a failed .watch() cycle', (done) => {
     const { compiler, events } = createCompilerWithEvents(configSyntaxError);
 
-    function finish() {
+    const finish = () => {
         expect(events).toEqual(['begin', 'error']);
 
         done();
-    }
+    };
 
     compiler
     .on('end', finish)
@@ -70,12 +70,12 @@ it('should emit the correct events if a compilation was canceled via .unwatch()'
     const { compiler, events } = createCompilerWithEvents(configBasic);
     let error;
 
-    function finish() {
+    const finish = () => {
         expect(events).toEqual(['begin', 'error']);
         expect(error.message).toMatch(/\bcanceled\b/);
 
         done();
-    }
+    };
 
     compiler
     .on('end', finish)
@@ -92,11 +92,11 @@ it('should emit the correct events if a compilation was canceled via .unwatch()'
 it('should emit the correct events if a compilation was invalidated', (done) => {
     const { compiler, events } = createCompilerWithEvents(configBasic);
 
-    function finish() {
+    const finish = () => {
         expect(events).toEqual(['begin', 'end', 'invalidate', 'begin', 'end']);
 
         done();
-    }
+    };
 
     const invalidate = compiler
     .on('error', finish)

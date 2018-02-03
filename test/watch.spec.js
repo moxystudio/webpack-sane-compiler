@@ -61,21 +61,35 @@ it('should output assets', (done) => {
     });
 });
 
-it('should return a function that can be used to invalidate and retrigger a compilation', (done) => {
-    const compiler = createCompiler(configBasic);
-    const logEvent = jest.fn();
+describe('invalidate', () => {
+    it('should return a function that can be used to invalidate and retrigger a compilation', (done) => {
+        const compiler = createCompiler(configBasic);
+        const logEvent = jest.fn();
 
-    compiler.once('begin', () => setImmediate(() => invalidate()));
-    compiler.on('begin', () => logEvent('begin'));
-    compiler.on('invalidate', () => logEvent('invalidate'));
-    compiler.on('end', () => logEvent('end'));
+        compiler.once('begin', () => setImmediate(() => invalidate()));
+        compiler.on('begin', () => logEvent('begin'));
+        compiler.on('invalidate', () => logEvent('invalidate'));
+        compiler.on('end', () => logEvent('end'));
 
-    const invalidate = compiler.watch(() => {
-        const loggedEvents = logEvent.mock.calls.reduce((results, [event]) => [...results, event], []);
+        const invalidate = compiler.watch(() => {
+            const loggedEvents = logEvent.mock.calls.reduce((results, [event]) => [...results, event], []);
 
-        expect(loggedEvents).toEqual(['begin', 'invalidate', 'begin', 'end']);
+            expect(loggedEvents).toEqual(['begin', 'invalidate', 'begin', 'end']);
 
-        done();
+            done();
+        });
+    });
+
+    it('should be a noop if the watcher is no longer active', async () => {
+        const compiler = createCompiler(configBasic);
+
+        const invalidate = compiler.watch(() => {});
+
+        await compiler
+        .on('error', () => {})
+        .unwatch();
+
+        expect(() => invalidate()).not.toThrow();
     });
 });
 

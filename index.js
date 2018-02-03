@@ -3,7 +3,7 @@
 const assert = require('assert');
 const webpack = require('webpack');
 const pDefer = require('p-defer');
-
+const wrap = require('lodash.wrap');
 const observeWebpackCompiler = require('./lib/observeWebpackCompiler');
 const nodeFs = require('./lib/nodeFs');
 
@@ -45,9 +45,12 @@ function compiler(webpackArg) {
             return state.error;
         },
 
-        assertIdle(calledMethod = 'this') {
-            assert(!state.webpackWatcher, `Compiler is watching, you can only call '${calledMethod}' when the compiler is idle`);
-            assert(!state.isCompiling, `Compiler is compiling, you can only call '${calledMethod}' when the compiler is idle`);
+        assertIdle(calledMethod) {
+            const getAssertMessage = (reason) =>
+                reason + (calledMethod ? `, you can only call '${calledMethod}' when the compiler is idle` : '');
+
+            assert(!state.webpackWatching, getAssertMessage('Compiler is watching'));
+            assert(!state.isCompiling, getAssertMessage('Compiler is running'));
         },
 
         run() {
@@ -72,24 +75,24 @@ function compiler(webpackArg) {
                 options = null;
             }
 
-            function baseHandler() {
+            handler = handler && wrap(handler, (handler) => {
                 !state.isCompiling && handler(state.error, state.compilation);
-            }
+            });
 
-            webpackCompiler.watch(options, baseHandler);
+            webpackCompiler.watch(options, handler);
 
             return () => {
-                if (!state.webpackWatcher) {
-                    throw new Error('Watcher is already closed');
+                if (!state.webpackWatching) {
+                    return;
                 }
 
                 eventEmitter.emit('invalidate');
-                state.webpackWatcher.invalidate();
+                state.webpackWatching.invalidate();
             };
         },
 
         unwatch() {
-            if (!state.webpackWatcher) {
+            if (!state.webpackWatching) {
                 return Promise.resolve();
             }
 
@@ -98,7 +101,7 @@ function compiler(webpackArg) {
                 // Additionally, we rely on `watch-close` event because only the latest callback
                 // gets called if webpackWatching.close(callback) is called multiple times
                 webpackCompiler.plugin('watch-close', resolve);
-                state.webpackWatcher.close();
+                state.webpackWatching.close();
             });
         },
 
@@ -117,23 +120,23 @@ function compiler(webpackArg) {
             // Wait for it to be resolved
             const deferred = pDefer();
 
-            function cleanup() {
+            const cleanup = () => {
                 eventEmitter
                 .removeListener('error', onError)
                 .removeListener('end', onEnd);
-            }
+            };
 
-            function onError(err) {
+            const onError = (err) => {
                 cleanup();
 
                 deferred.reject(err);
-            }
+            };
 
-            function onEnd(compilation) {
+            const onEnd = (compilation) => {
                 cleanup();
 
                 deferred.resolve(compilation);
-            }
+            };
 
             compiler
             .on('error', onError)
