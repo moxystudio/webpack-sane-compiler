@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.0.3"></a>
+## [3.0.3](https://github.com/moxystudio/webpack-sane-compiler/compare/v3.0.2...v3.0.3) (2018-02-03)
+
+
+### Bug Fixes
+
+* ensure that invalidate() only works on the same watching instance ([7f7b55f](https://github.com/moxystudio/webpack-sane-compiler/commit/7f7b55f))
+
+
+
 <a name="3.0.2"></a>
 ## [3.0.2](https://github.com/moxystudio/webpack-sane-compiler/compare/v3.0.1...v3.0.2) (2018-02-03)
 
