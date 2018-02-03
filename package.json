@@ -25,6 +25,7 @@
   "scripts": {
     "lint": "eslint .",
     "test": "jest --env node --coverage",
+    "posttest": "rimraf test/tmp",
     "prerelease": "npm t && npm run lint",
     "release": "standard-version",
     "precommit": "lint-staged",
