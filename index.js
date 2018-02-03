@@ -79,10 +79,11 @@ function compiler(webpackArg) {
                 !state.isCompiling && handler(state.error, state.compilation);
             });
 
-            webpackCompiler.watch(options, handler);
+            const webpackWatching = webpackCompiler.watch(options, handler);
 
             return () => {
-                if (!state.webpackWatching) {
+                // Ignore if the watching instance is no longer the same
+                if (webpackWatching !== state.webpackWatching) {
                     return;
                 }
 
