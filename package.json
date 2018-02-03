@@ -1,6 +1,6 @@
 {
   "name": "webpack-sane-compiler",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "A webpack compiler wrapper that provides a nicer API.",
   "keywords": [
     "webpack",
