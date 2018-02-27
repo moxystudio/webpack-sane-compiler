@@ -7,6 +7,8 @@ const configSyntaxError = require('./configs/syntax-error');
 
 afterEach(() => createCompiler.teardown());
 
+jest.setTimeout(10000);
+
 it('should fulfill with the compilation result', async () => {
     const compiler = createCompiler(configBasic);
 
@@ -33,9 +35,15 @@ it('should fail if there\'s a fatal error', async () => {
     const compiler = createCompiler(configBasic);
     const contrivedError = new Error('foo');
 
-    compiler.webpackCompiler.plugin('before-run', (compiler, callback) => {
-        setImmediate(() => callback(contrivedError));
-    });
+    if ('hooks' in compiler.webpackCompiler) {
+        compiler.webpackCompiler.hooks.beforeRun.tapAsync('beforeRun', (compiler, callback) => {
+            setImmediate(() => callback(contrivedError));
+        });
+    } else {
+        compiler.webpackCompiler.plugin('before-run', (compiler, callback) => {
+            setImmediate(() => callback(contrivedError));
+        });
+    }
 
     try {
         await compiler.run();

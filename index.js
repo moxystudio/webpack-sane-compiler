@@ -101,7 +101,11 @@ function compiler(webpackArg) {
                 // As per the documentation, .close() never fails
                 // Additionally, we rely on `watch-close` event because only the latest callback
                 // gets called if webpackWatching.close(callback) is called multiple times
-                webpackCompiler.plugin('watch-close', resolve);
+                if ('hooks' in this.webpackCompiler) {
+                    webpackCompiler.hooks.watchClose.tap('watchClose', resolve);
+                } else {
+                    webpackCompiler.plugin('watch-close', resolve);
+                }
                 state.webpackWatching.close();
             });
         },
