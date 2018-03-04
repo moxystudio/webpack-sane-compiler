@@ -6,6 +6,8 @@ const configSyntaxError = require('./configs/syntax-error');
 
 afterEach(() => createCompiler.teardown());
 
+jest.setTimeout(10000);
+
 it('should have correct state before and after a successful run', async () => {
     const compiler = createCompiler(configBasic);
 
@@ -57,7 +59,7 @@ it('should have correct state before and after a successful watch run', (done) =
         done();
     });
 
-    expect(compiler.isCompiling()).toBe(true);  // Takes some time to start compiling
+    expect(compiler.isCompiling()).toBe(true); // Takes some time to start compiling
     expect(compiler.getError()).toBe(null);
     expect(compiler.getCompilation()).toBe(null);
 });
@@ -79,7 +81,7 @@ it('should have correct state before and after a failed watch run', (done) => {
         done();
     });
 
-    expect(compiler.isCompiling()).toBe(true);  // Takes some time to start compiling
+    expect(compiler.isCompiling()).toBe(true); // Takes some time to start compiling
     expect(compiler.getError()).toBe(null);
     expect(compiler.getCompilation()).toBe(null);
 });

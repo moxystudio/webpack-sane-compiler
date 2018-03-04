@@ -8,6 +8,8 @@ const configSyntaxError = require('./configs/syntax-error');
 
 afterEach(() => createCompiler.teardown());
 
+jest.setTimeout(10000);
+
 it('should call the handler everytime a file changes', (done) => {
     const compiler = createCompiler(configBasic);
     let callsCount = 0;
@@ -42,7 +44,11 @@ it('should fail if there\'s a fatal error', (done) => {
     const compiler = createCompiler(configBasic);
     const contrivedError = new Error('foo');
 
-    compiler.webpackCompiler.plugin('watch-run', (compiler, callback) => callback(contrivedError));
+    if ('hooks' in compiler.webpackCompiler) {
+        compiler.webpackCompiler.hooks.watchRun.tapAsync('watchRun', (compiler, callback) => callback(contrivedError));
+    } else {
+        compiler.webpackCompiler.plugin('watch-run', (compiler, callback) => callback(contrivedError));
+    }
 
     compiler.watch((err) => {
         expect(err).toBe(contrivedError);

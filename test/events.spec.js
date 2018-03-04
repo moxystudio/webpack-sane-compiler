@@ -18,6 +18,8 @@ function createCompilerWithEvents(...args) {
 
 afterEach(() => createCompiler.teardown());
 
+jest.setTimeout(10000);
+
 it('should emit correct events on a successful .run()', async () => {
     const { compiler, events } = createCompilerWithEvents(configBasic);
 

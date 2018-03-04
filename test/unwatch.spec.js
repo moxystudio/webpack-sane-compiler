@@ -7,6 +7,8 @@ const configBasic = require('./configs/basic');
 
 afterEach(() => createCompiler.teardown());
 
+jest.setTimeout(10000);
+
 it('should return a promise', () => {
     const compiler = createCompiler(configBasic);
 
