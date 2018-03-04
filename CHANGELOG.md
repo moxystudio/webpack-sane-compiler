@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.1.0"></a>
+# [3.1.0](https://github.com/moxystudio/webpack-sane-compiler/compare/v3.0.3...v3.1.0) (2018-03-04)
+
+
+### Features
+
+* support webpack v4 ([268ccd7](https://github.com/moxystudio/webpack-sane-compiler/commit/268ccd7))
+
+
+
 <a name="3.0.3"></a>
 ## [3.0.3](https://github.com/moxystudio/webpack-sane-compiler/compare/v3.0.2...v3.0.3) (2018-02-03)
 
