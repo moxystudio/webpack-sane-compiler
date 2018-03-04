@@ -22,10 +22,10 @@ it('should call the handler everytime a file changes', (done) => {
         if (callsCount === 2) {
             done();
         } else {
-            touchFile(configBasic.entry);
+            setTimeout(() => touchFile(configBasic.entry), 150);
         }
     });
-});
+}, 10000);
 
 it('should fail if the compiler fails', (done) => {
     const compiler = createCompiler(configSyntaxError);
@@ -42,7 +42,7 @@ it('should fail if there\'s a fatal error', (done) => {
     const compiler = createCompiler(configBasic);
     const contrivedError = new Error('foo');
 
-    compiler.webpackCompiler.plugin('watch-run', (compiler, callback) => callback(contrivedError));
+    compiler.addHook('watchRun', 'tapAsync', (compiler, callback) => callback(contrivedError));
 
     compiler.watch((err) => {
         expect(err).toBe(contrivedError);
