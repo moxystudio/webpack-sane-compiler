@@ -5,6 +5,8 @@ const createCompiler = require('./util/createCompiler');
 const configBasic = require('./configs/basic');
 const configSyntaxError = require('./configs/syntax-error');
 
+jest.setTimeout(20000);
+
 afterEach(() => createCompiler.teardown());
 
 it('should fulfill with the compilation result', async () => {

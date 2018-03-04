@@ -7,6 +7,8 @@ const saneCompiler = require('../');
 const createCompiler = require('./util/createCompiler');
 const configBasic = require('./configs/basic');
 
+jest.setTimeout(20000);
+
 afterEach(() => createCompiler.teardown());
 
 it('should give access to webpack compiler & config', () => {

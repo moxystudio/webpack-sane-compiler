@@ -6,6 +6,8 @@ const touchFile = require('./util/touchFile');
 const configBasic = require('./configs/basic');
 const configSyntaxError = require('./configs/syntax-error');
 
+jest.setTimeout(20000);
+
 afterEach(() => createCompiler.teardown());
 
 it('should call the handler everytime a file changes', (done) => {
@@ -25,7 +27,7 @@ it('should call the handler everytime a file changes', (done) => {
             setTimeout(() => touchFile(configBasic.entry), 150);
         }
     });
-}, 10000);
+});
 
 it('should fail if the compiler fails', (done) => {
     const compiler = createCompiler(configSyntaxError);
