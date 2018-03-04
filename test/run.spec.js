@@ -33,9 +33,7 @@ it('should fail if there\'s a fatal error', async () => {
     const compiler = createCompiler(configBasic);
     const contrivedError = new Error('foo');
 
-    compiler.webpackCompiler.plugin('before-run', (compiler, callback) => {
-        setImmediate(() => callback(contrivedError));
-    });
+    compiler.addHook('beforeRun', 'tapAsync', (compiler, callback) => callback(contrivedError));
 
     try {
         await compiler.run();

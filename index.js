@@ -25,7 +25,7 @@ function compiler(webpackArg) {
     const webpackCompiler = webpackArg.run ? webpackArg : webpack(webpackArg);
     const webpackConfig = webpackArg.run ? webpackCompiler.options : webpackArg;
 
-    const { eventEmitter, state } = observeWebpackCompiler(webpackCompiler);
+    const { eventEmitter, state, addHook } = observeWebpackCompiler(webpackCompiler);
 
     webpackCompiler.outputFileSystem = nodeFs();
 
@@ -101,7 +101,7 @@ function compiler(webpackArg) {
                 // As per the documentation, .close() never fails
                 // Additionally, we rely on `watch-close` event because only the latest callback
                 // gets called if webpackWatching.close(callback) is called multiple times
-                webpackCompiler.plugin('watch-close', resolve);
+                addHook('watchClose', resolve);
                 state.webpackWatching.close();
             });
         },

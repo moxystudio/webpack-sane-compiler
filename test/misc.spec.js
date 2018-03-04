@@ -15,7 +15,7 @@ it('should give access to webpack compiler & config', () => {
     expect(typeof compiler.webpackConfig).toBe('object');
     expect(typeof compiler.webpackConfig.output).toBe('object');
     expect(typeof compiler.webpackCompiler).toBe('object');
-    expect(typeof compiler.webpackCompiler.plugin).toBe('function');
+    expect(typeof compiler.webpackCompiler.createCompilation).toBe('function');
 });
 
 it('should prevent direct access to webpack compiler\'s main methods', () => {

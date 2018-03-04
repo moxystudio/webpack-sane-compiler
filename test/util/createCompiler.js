@@ -5,6 +5,7 @@ const pify = require('pify');
 const pFinally = require('p-finally');
 const rimraf = pify(require('rimraf'));
 const saneCompiler = require('../../');
+const { createAddHook } = require('../../lib/observeWebpackCompiler');
 
 const tmpDir = path.resolve(`${__dirname}/../tmp`);
 const compilers = [];
@@ -12,6 +13,7 @@ const compilers = [];
 function createCompiler(webpackConfig) {
     const compiler = saneCompiler(uniquifyConfig(webpackConfig));
 
+    compiler.addHook = createAddHook(compiler.webpackCompiler);
     compilers.push(compiler);
 
     return compiler;
@@ -52,8 +54,8 @@ function uniquifyConfig(webpackConfig) {
 
     const uid = `${Math.round(Math.random() * 100000000000).toString(36)}-${Date.now().toString(36)}`;
 
-    webpackConfig = Object.assign({}, webpackConfig);
-    webpackConfig.output = Object.assign({}, webpackConfig.output);
+    webpackConfig = { ...webpackConfig };
+    webpackConfig.output = { ...webpackConfig.output };
     webpackConfig.output.path = webpackConfig.output.path.replace(tmpDir, path.join(tmpDir, uid));
 
     return webpackConfig;
