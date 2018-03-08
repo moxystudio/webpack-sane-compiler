@@ -5,8 +5,6 @@ const createCompiler = require('./util/createCompiler');
 const touchFile = require('./util/touchFile');
 const configBasic = require('./configs/basic');
 
-jest.setTimeout(20000);
-
 afterEach(() => createCompiler.teardown());
 
 it('should return a promise', () => {

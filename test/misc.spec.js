@@ -7,8 +7,6 @@ const saneCompiler = require('../');
 const createCompiler = require('./util/createCompiler');
 const configBasic = require('./configs/basic');
 
-jest.setTimeout(20000);
-
 afterEach(() => createCompiler.teardown());
 
 it('should give access to webpack compiler & config', () => {
@@ -34,7 +32,7 @@ it('should override the webpack compiler\'s outputFileSystem to a fully featured
 });
 
 it('should allow passing a compiler instead of a webpack config', async () => {
-    const webpackCompiler = webpack(createCompiler.uniquifyConfig(configBasic));
+    const webpackCompiler = webpack(createCompiler.prepareConfig(configBasic));
     const compiler = saneCompiler(webpackCompiler);
 
     const { stats } = await compiler.run();
