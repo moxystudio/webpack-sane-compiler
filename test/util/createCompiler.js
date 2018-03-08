@@ -1,17 +1,19 @@
 'use strict';
 
 const path = require('path');
+const webpack = require('webpack');
 const pify = require('pify');
 const pFinally = require('p-finally');
 const rimraf = pify(require('rimraf'));
 const saneCompiler = require('../../');
 const { createAddHook } = require('../../lib/observeWebpackCompiler');
 
+const supportsMode = !!webpack.version;
 const tmpDir = path.resolve(`${__dirname}/../tmp`);
 const compilers = [];
 
 function createCompiler(webpackConfig) {
-    const compiler = saneCompiler(uniquifyConfig(webpackConfig));
+    const compiler = saneCompiler(prepareConfig(webpackConfig));
 
     compiler.addHook = createAddHook(compiler.webpackCompiler);
     compilers.push(compiler);
@@ -47,20 +49,26 @@ function teardown() {
     }));
 }
 
-function uniquifyConfig(webpackConfig) {
+function prepareConfig(webpackConfig) {
     if (webpackConfig.output.path.indexOf(tmpDir) !== 0) {
         throw new Error(`\`webpackConfig.output.path\` must start with ${tmpDir}`);
     }
 
+    // Uniquify config
     const uid = `${Math.round(Math.random() * 100000000000).toString(36)}-${Date.now().toString(36)}`;
 
     webpackConfig = { ...webpackConfig };
     webpackConfig.output = { ...webpackConfig.output };
     webpackConfig.output.path = webpackConfig.output.path.replace(tmpDir, path.join(tmpDir, uid));
 
+    // Ensure mode is set to development on webpack >= 4
+    if (supportsMode) {
+        webpackConfig.mode = 'development';
+    }
+
     return webpackConfig;
 }
 
 module.exports = createCompiler;
 module.exports.teardown = teardown;
-module.exports.uniquifyConfig = uniquifyConfig;
+module.exports.prepareConfig = prepareConfig;

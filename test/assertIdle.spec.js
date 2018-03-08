@@ -3,8 +3,6 @@
 const createCompiler = require('./util/createCompiler');
 const configBasic = require('./configs/basic');
 
-jest.setTimeout(20000);
-
 afterEach(() => createCompiler.teardown());
 
 it('should not throw if iddling', () => {

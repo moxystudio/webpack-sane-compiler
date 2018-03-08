@@ -6,8 +6,6 @@ const touchFile = require('./util/touchFile');
 const configBasic = require('./configs/basic');
 const configSyntaxError = require('./configs/syntax-error');
 
-jest.setTimeout(20000);
-
 afterEach(() => createCompiler.teardown());
 
 it('should call the handler everytime a file changes', (done) => {
