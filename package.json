@@ -58,7 +58,7 @@
     "p-finally": "^1.0.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^6.0.1",
+    "@commitlint/cli": "^7.0.0",
     "@commitlint/config-conventional": "^6.0.2",
     "delay": "^2.0.0",
     "eslint": "^4.0.0",
