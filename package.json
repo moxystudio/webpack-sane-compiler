@@ -1,7 +1,7 @@
 {
   "name": "webpack-sane-compiler",
   "version": "3.1.1",
-  "description": "A webpack compiler wrapper that provides a nicer API.",
+  "description": "A webpack compiler wrapper that provides a nicer API",
   "keywords": [
     "webpack",
     "compiler",
@@ -61,16 +61,16 @@
     "@commitlint/cli": "^7.0.0",
     "@commitlint/config-conventional": "^7.0.0",
     "delay": "^3.0.0",
-    "eslint": "^4.0.0",
-    "eslint-config-moxy": "^5.0.0",
+    "eslint": "^5.3.0",
+    "eslint-config-moxy": "^6.0.1",
     "husky": "^0.14.0",
-    "jest": "^22.0.0",
+    "jest": "^23.4.2",
     "lint-staged": "^7.2.0",
     "p-settle": "^2.0.0",
     "pify": "^3.0.0",
     "rimraf": "^2.6.2",
     "standard-version": "^4.4.0",
-    "webpack": "^4.16.2"
+    "webpack": "^4.16.5"
   },
   "jest": {
     "modulePathIgnorePatterns": [
