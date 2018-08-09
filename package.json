@@ -67,7 +67,7 @@
     "jest": "^23.4.2",
     "lint-staged": "^7.2.0",
     "p-settle": "^2.0.0",
-    "pify": "^3.0.0",
+    "pify": "^4.0.0",
     "rimraf": "^2.6.2",
     "standard-version": "^4.4.0",
     "webpack": "^4.16.5"
