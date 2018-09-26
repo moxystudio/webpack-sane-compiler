@@ -63,7 +63,7 @@
     "delay": "^3.0.0",
     "eslint": "^5.3.0",
     "eslint-config-moxy": "^6.0.1",
-    "husky": "^0.14.0",
+    "husky": "^1.0.0",
     "jest": "^23.4.2",
     "lint-staged": "^7.2.0",
     "p-settle": "^2.0.0",
