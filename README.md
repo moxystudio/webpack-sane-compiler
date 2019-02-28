@@ -1,6 +1,6 @@
 # webpack-sane-compiler
 
-[![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][codecov-image]][codecov-url] [![Dependency status][david-dm-image]][david-dm-url] [![Dev Dependency status][david-dm-dev-image]][david-dm-dev-url] [![Greenkeeper badge][greenkeeper-image]][greenkeeper-url]
+[![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][codecov-image]][codecov-url] [![Dependency status][david-dm-image]][david-dm-url] [![Dev Dependency status][david-dm-dev-image]][david-dm-dev-url] 
 
 [npm-url]:https://npmjs.org/package/webpack-sane-compiler
 [npm-image]:http://img.shields.io/npm/v/webpack-sane-compiler.svg
@@ -13,8 +13,6 @@
 [david-dm-image]:https://img.shields.io/david/moxystudio/webpack-sane-compiler.svg
 [david-dm-dev-url]:https://david-dm.org/moxystudio/webpack-sane-compiler?type=dev
 [david-dm-dev-image]:https://img.shields.io/david/dev/moxystudio/webpack-sane-compiler.svg
-[greenkeeper-image]:https://badges.greenkeeper.io/moxystudio/webpack-sane-compiler.svg
-[greenkeeper-url]:https://greenkeeper.io
 
 A webpack compiler wrapper that provides a nicer API.
 
